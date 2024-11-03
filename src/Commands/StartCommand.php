@@ -12,7 +12,9 @@ class StartCommand extends Command
 
     public function handle()
     {
-        $proceed = $this->confirm('This will convert this project to a module. Make sure you do this in a fresh project. Do you want to proceed?');
+        $this->info('This will convert this project to a module.');
+        $this->info('Make sure you do this in a fresh project.');
+        $proceed = $this->confirm('Do you want to proceed?');
         if(! $proceed) {
             $this->info('Aborted');
             return;
