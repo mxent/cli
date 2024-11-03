@@ -1,0 +1,18 @@
+<template>
+    <Head>
+        <title>ModuleName</title>
+    </Head>
+
+    <div>
+        <h1>ModuleName</h1>
+    </div>
+</template>
+
+<script setup>
+    import { Head } from '@inertiajs/vue3';
+    import { onMounted } from 'vue';
+
+    onMounted(() => {
+        console.log('Component mounted.');
+    });
+</script>
