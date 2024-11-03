@@ -85,6 +85,10 @@ class StartCommand extends Command
         }
 
         foreach($empty as $path) {
+            if(! is_dir(base_path($path))) {
+                continue;
+            }
+
             $files = scandir(base_path($path));
             foreach($files as $file) {
                 if($file == '.' || $file == '..') {
