@@ -80,6 +80,7 @@ class StartCommand extends Command
         $npmDevInstalls = [
             '@inertiajs/vue3' => null,
             '@vitejs/plugin-vue' => null,
+            'path' => null,
         ];
 
         foreach($renames as $from => $to) {

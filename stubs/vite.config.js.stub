@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import path from 'path';
 
 export default defineConfig({
     plugins: [
@@ -17,4 +18,23 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: [
+            {
+                find: '@',
+                replacement: 'resources/js',
+                customResolver: function (a, b) {
+                    let basePath = a;
+                    const pathBits = b.split('/');
+                    if(pathBits.includes('vendor')) {
+                        const vendorIdx = pathBits.indexOf('vendor');
+                        const vendorBits = pathBits.slice(vendorIdx, vendorIdx + 3);
+                        basePath = path.join(...vendorBits, basePath);
+                    }
+                    basePath = path.resolve(basePath);
+                    return basePath;
+                }
+            },
+        ],
+    },
 });
