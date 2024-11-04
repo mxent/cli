@@ -23,6 +23,12 @@ class ModuleNameServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../resources/views' => resource_path('views/vendor/module-name'),
         ], 'module-name-views');
+        $this->publishes([
+            __DIR__.'/../../resources/js' => resource_path('js/vendor/module-name'),
+        ], 'module-name-js');
+        $this->publishes([
+            __DIR__.'/../../resources/css' => resource_path('css/vendor/module-name'),
+        ], 'module-name-css');
     }
 
     public function register()
