@@ -13,8 +13,16 @@
         "skipLibCheck": true,
         "paths": {
             "@/*": ["./resources/js/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
+            "ziggy-js": ["./vendor/tightenco/ziggy"],
+            "@vendor-name/*": ["vendor/vendor-name/*/resources/js"]
         }
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.vue"]
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.d.ts",
+        "resources/js/**/*.vue",
+        "vendor/vendor-name/*/resources/js/**/*.ts",
+        "vendor/vendor-name/*/resources/js/**/*.d.ts",
+        "vendor/vendor-name/*/resources/js/**/*.vue"
+    ]
 }

@@ -47,6 +47,10 @@ export default defineConfig({
                     return basePath;
                 },
             },
+            {
+                find: 'vendor',
+                replacement: path.resolve(__dirname, 'vendor'),
+            },
         ],
     },
 });
