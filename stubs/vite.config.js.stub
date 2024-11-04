@@ -21,6 +21,10 @@ export default defineConfig({
     resolve: {
         alias: [
             {
+                find: '@vendor-name/*',
+                replacement: 'vendor/vendor-name/*/resources/js',
+            },
+            {
                 find: '@',
                 replacement: 'resources/js',
                 customResolver: function (a, b) {
