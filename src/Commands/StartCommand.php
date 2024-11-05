@@ -12,6 +12,15 @@ class StartCommand extends Command
 
     public function handle()
     {
+        $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
+        if(
+            $composerJson['name'] != 'laravel/laravel' &&
+            $composerJson['type'] != 'project'
+        ) {
+            $this->error('Please use this command in a fresh Laravel project');
+            return;
+        }
+
         $this->info('This will convert this project to a module.');
         $this->info('Make sure you do this in a fresh project.');
         $proceed = $this->confirm('Do you want to proceed?');
@@ -73,6 +82,7 @@ class StartCommand extends Command
         ];
 
         $composerRequires = [
+            'mxent/auth' => null,
             'inertiajs/inertia-laravel' => null,
             'tightenco/ziggy' => null,
         ];
@@ -115,7 +125,6 @@ class StartCommand extends Command
         $this->recursiveStubs(__DIR__.'/../../stubs', base_path(), $replaces);
         $this->recursiveReplace(base_path(), $replaces);
 
-        $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         if(! isset($composerJson['extra']['laravel']['providers'])) {
             $composerJson['extra']['laravel']['providers'] = [];
         }
