@@ -82,7 +82,6 @@ class StartCommand extends Command
         ];
 
         $composerRequires = [
-            'mxent/auth' => null,
             'inertiajs/inertia-laravel' => null,
             'tightenco/ziggy' => null,
         ];
