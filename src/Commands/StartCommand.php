@@ -12,17 +12,20 @@ class StartCommand extends Command
 
     public function handle()
     {
+        $force = $this->option('force') ? true : false;
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         if(
-            $composerJson['name'] != 'laravel/laravel' ||
-            $composerJson['type'] != 'project'
+            !$force &&
+            (
+                ! isset($composerJson['name']) ||
+                ! isset($composerJson['type'])
+            )
         ) {
             $this->error('Please use this command in a fresh Laravel project');
             return;
         }
 
-        $this->components->info('This will convert this project to a module.');
-        $this->components->info('Make sure you do this in a fresh project.');
+        $this->components->info('This will convert this project to a module. Make sure you do this in a fresh project.');
         $proceed = $this->confirm('Do you want to proceed?');
         if(! $proceed) {
             $this->components->info('Aborted');
@@ -142,7 +145,7 @@ class StartCommand extends Command
         if(! isset($composerJson['scripts']['post-update-cmd'])) {
             $composerJson['scripts']['post-update-cmd'] = [];
         }
-        $composerJson['scripts']['post-update-cmd'][] = '@php artisan vendor:publish --tag=laravel-assets --ansi --force';
+        $composerJson['scripts']['post-update-cmd'][] = '@php artisan mxent:npm-diff';
 
         $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composerJsonClean);
