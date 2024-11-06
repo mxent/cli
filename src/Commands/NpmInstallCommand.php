@@ -4,10 +4,10 @@ namespace Mxent\CLI\Commands;
 
 use Illuminate\Console\Command;
 
-class NpmDiffCommand extends Command
+class NpmInstallCommand extends Command
 {
-    protected $signature = 'mxent:npm-diff';
-    protected $description = 'Check npm dependencies for differences';
+    protected $signature = 'mxent:npmi';
+    protected $description = 'Install npm missing dependencies';
 
     public function handle()
     {
@@ -41,23 +41,22 @@ class NpmDiffCommand extends Command
         }
 
         if(count($dependenciesMissing) > 0) {
-            $this->components->warn('These packages have dependencies missing in package.json');
-            $this->table(['Package', 'Missing'], array_map(function($package, $missing) {
-                return [$package, implode(' ', $missing)];
-            }, array_keys($dependenciesMissing), $dependenciesMissing));
+            passthru('npm install '.implode(' ', array_map(function($package, $missing) {
+                return $missing;
+            }, array_keys($devDependenciesMissing), $devDependenciesMissing)));
         }
 
         if(count($devDependenciesMissing) > 0) {
-            $this->components->warn('These packages have devDependencies missing in package.json');
-            $this->table(['Package', 'Missing'], array_map(function($package, $missing) {
-                return [$package, implode(' ', $missing)];
-            }, array_keys($devDependenciesMissing), $devDependenciesMissing));
+            passthru('npm install --save-dev '.implode(' ', array_map(function($package, $missing) {
+                return $missing;
+            }, array_keys($devDependenciesMissing), $devDependenciesMissing)));
         }
 
         if(count($dependenciesMissing) == 0 && count($devDependenciesMissing) == 0) {
             $this->components->info('No missing dependencies found');
         } else {
-            $this->components->info('Run `php artisan mxent:npmi` to install');
+            $this->components->info('Missing dependencies installed');
         }
+
     }
 }
