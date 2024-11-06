@@ -14,7 +14,7 @@ class StartCommand extends Command
     {
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         if(
-            $composerJson['name'] != 'laravel/laravel' &&
+            $composerJson['name'] != 'laravel/laravel' ||
             $composerJson['type'] != 'project'
         ) {
             $this->error('Please use this command in a fresh Laravel project');
@@ -92,6 +92,10 @@ class StartCommand extends Command
             'path' => null,
         ];
 
+        $npmUninstalls = [
+            'axios',
+        ];
+
         foreach($renames as $from => $to) {
             rename(base_path($from), base_path($to));
         }
@@ -137,6 +141,12 @@ class StartCommand extends Command
             $allComposerRequires[] = $packageName.($version ? ':'.$version : '');
         }
         passthru('composer require '.implode(' ', $allComposerRequires));
+
+        $allNpmUninstalls = [];
+        foreach($npmUninstalls as $packageName) {
+            $allNpmUninstalls[] = $packageName;
+        }
+        passthru('npm uninstall '.implode(' ', $allNpmUninstalls));
 
         $allNpmDevInstalls = [];
         foreach($npmDevInstalls as $packageName => $version) {
