@@ -21,11 +21,11 @@ class StartCommand extends Command
             return;
         }
 
-        $this->info('This will convert this project to a module.');
-        $this->info('Make sure you do this in a fresh project.');
+        $this->components->info('This will convert this project to a module.');
+        $this->components->info('Make sure you do this in a fresh project.');
         $proceed = $this->confirm('Do you want to proceed?');
         if(! $proceed) {
-            $this->info('Aborted');
+            $this->components->info('Aborted');
             return;
         }
 
@@ -135,6 +135,15 @@ class StartCommand extends Command
         $composerJson['extra']['laravel']['providers'][] = $vendor.'\\'.$name.'\\Providers\\'.$name.'ServiceProvider';
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
+        if(! isset($composerJson['scripts']['post-install-cmd'])) {
+            $composerJson['scripts']['post-install-cmd'] = [];
+        }
+        $composerJson['scripts']['post-install-cmd'][] = '@php artisan mxent:npm-diff';
+        if(! isset($composerJson['scripts']['post-update-cmd'])) {
+            $composerJson['scripts']['post-update-cmd'] = [];
+        }
+        $composerJson['scripts']['post-update-cmd'][] = '@php artisan vendor:publish --tag=laravel-assets --ansi --force';
+
         $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composerJsonClean);
 
@@ -156,7 +165,7 @@ class StartCommand extends Command
         }
         passthru('npm install --save-dev '.implode(' ', $allNpmDevInstalls));
 
-        $this->info('Module '.$package.' created');
+        $this->components->info('Module '.$package.' created');
     }
 
     private function recursiveStubs($path, $destination, $replaces)

@@ -37,16 +37,16 @@ class NpmDiffCommand extends Command
         }
 
         if(count($dependenciesMissing) > 0) {
-            $this->info('Found the following packages that have dependencies missing in package.json:');
+            $this->components->info('Found the following packages that have dependencies missing in package.json:');
             foreach ($dependenciesMissing as $package => $missing) {
-                $this->info($package.': '.implode(' ', $missing));
+                $this->components->info($package.': '.implode(' ', $missing));
             }
         }
 
         if(count($devDependenciesMissing) > 0) {
-            $this->info('Found the following packages that have devDependencies missing in package.json:');
+            $this->components->info('Found the following packages that have devDependencies missing in package.json:');
             foreach ($devDependenciesMissing as $package => $missing) {
-                $this->info($package.': '.implode(' ', $missing));
+                $this->components->info($package.': '.implode(' ', $missing));
             }
         }
     }
