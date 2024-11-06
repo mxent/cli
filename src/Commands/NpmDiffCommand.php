@@ -3,7 +3,6 @@
 namespace Mxent\CLI\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class NpmDiffCommand extends Command
 {
