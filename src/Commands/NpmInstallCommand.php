@@ -41,15 +41,19 @@ class NpmInstallCommand extends Command
         }
 
         if(count($dependenciesMissing) > 0) {
-            passthru('npm install '.implode(' ', array_map(function($package, $missing) {
-                return $missing;
-            }, array_keys($devDependenciesMissing), $devDependenciesMissing)));
+            $dependenciesInstallCommand = 'npm install '.implode(' ', array_map(function($package, $missing) {
+                return implode(' ', $missing);
+            }, array_keys($dependenciesMissing), $dependenciesMissing));
+            $this->info('Running: '.$dependenciesInstallCommand);
+            passthru($dependenciesInstallCommand);
         }
 
         if(count($devDependenciesMissing) > 0) {
-            passthru('npm install --save-dev '.implode(' ', array_map(function($package, $missing) {
-                return $missing;
-            }, array_keys($devDependenciesMissing), $devDependenciesMissing)));
+            $devDependenciesInstallCommand = 'npm install '.implode(' ', array_map(function($package, $missing) {
+                return implode(' ', $missing);
+            }, array_keys($devDependenciesMissing), $devDependenciesMissing));
+            $this->info('Running: '.$devDependenciesInstallCommand);
+            passthru($devDependenciesInstallCommand);
         }
 
         if(count($dependenciesMissing) == 0 && count($devDependenciesMissing) == 0) {
