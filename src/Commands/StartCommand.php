@@ -7,18 +7,18 @@ use Illuminate\Support\Str;
 
 class StartCommand extends Command
 {
-    protected $signature = 'mxent:start';
+    protected $signature = 'mxent:start {--force}';
     protected $description = 'Convert this project to a module';
 
     public function handle()
     {
-        $force = $this->option('force') ? true : false;
+        $force = $this->option('force');
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         if(
             !$force &&
             (
-                ! isset($composerJson['name']) ||
-                ! isset($composerJson['type'])
+                ! $composerJson['name'] != 'laravel/laravel' ||
+                ! $composerJson['type'] != 'project'
             )
         ) {
             $this->error('Please use this command in a fresh Laravel project');
