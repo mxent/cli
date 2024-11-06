@@ -22,6 +22,7 @@ class CLIServiceProvider extends ServiceProvider
     {
         $this->commands([
             \Mxent\CLI\Commands\StartCommand::class,
+            \Mxent\CLI\Commands\NpmDiffCommand::class,
         ]);
     }
 
