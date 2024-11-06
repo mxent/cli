@@ -135,7 +135,8 @@ class StartCommand extends Command
         $composerJson['extra']['laravel']['providers'][] = $vendor.'\\'.$name.'\\Providers\\'.$name.'ServiceProvider';
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
-        file_put_contents(base_path('composer.json'), json_encode($composerJson));
+        $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents(base_path('composer.json'), $composerJsonClean);
 
         $allComposerRequires = [];
         foreach($composerRequires as $packageName => $version) {
