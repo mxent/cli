@@ -83,7 +83,6 @@ class StartCommand extends Command
 
         $composerRequires = [
             'inertiajs/inertia-laravel' => null,
-            'tightenco/ziggy' => null,
         ];
 
         $npmDevInstalls = [
