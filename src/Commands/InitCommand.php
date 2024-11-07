@@ -101,6 +101,13 @@ class InitCommand extends Command
             '@commitlint/cli' => null,
             '@commitlint/config-conventional' => null,
             'husky' => null,
+            'lint-staged' => null,
+            'prettier' => null,
+            'eslint' => null,
+            'globals' => null,
+            '@eslint/js' => null,
+            'typescript-eslint' => null,
+            'eslint-plugin-vue' => null,
         ];
 
         $npmUninstalls = [
@@ -164,6 +171,11 @@ class InitCommand extends Command
             $packageJson['scripts']['test'] = '';
         }
 
+        if (! isset($packageJson['lint-staged'])) {
+            $packageJson['lint-staged'] = [];
+        }
+        $packageJson['lint-staged']['**/*.{ts,vue}'] = ['prettier --write', 'eslint --fix'];
+
         $packageJsonClean = json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('package.json'), $packageJsonClean);
 
@@ -191,6 +203,12 @@ class InitCommand extends Command
         $passThru[] = 'npx husky init';
         $passThru[] = 'echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg';
         passthru(implode(' && ', $passThru));
+
+        $huskyPreCommit = file_get_contents(base_path('.husky/pre-commit'));
+        $huskyPreCommit = 'npx lint-staged'.PHP_EOL.$huskyPreCommit;
+        file_put_contents(base_path('.husky/pre-commit'), $huskyPreCommit);
+
+        passthru('git add .');
 
         $this->components->info('Module '.$package.' created');
     }
