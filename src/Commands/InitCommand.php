@@ -5,9 +5,9 @@ namespace Mxent\CLI\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class StartCommand extends Command
+class InitCommand extends Command
 {
-    protected $signature = 'mxent:start {--force}';
+    protected $signature = 'mxent:init {--force}';
     protected $description = 'Convert this project to a module';
 
     public function handle()
