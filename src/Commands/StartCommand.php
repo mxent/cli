@@ -155,7 +155,9 @@ class StartCommand extends Command
         if(! isset($packageJson['workspaces'])) {
             $packageJson['workspaces'] = [];
         }
-        $packageJson['workspaces'][] = 'vendor/vendor-name/*';
+        if(! in_array('vendor/'.$vendorSnake.'/*', $packageJson['workspaces'])) {
+            $packageJson['workspaces'][] = 'vendor/'.$vendorSnake.'/*';
+        }
 
         $packageJsonClean = json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('package.json'), $packageJsonClean);
