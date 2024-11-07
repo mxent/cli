@@ -164,8 +164,19 @@ class InitCommand extends Command
             $packageJson['scripts']['test'] = '';
         }
 
+        if (! isset($packageJson['scripts']['prepare'])) {
+            $packageJson['scripts']['prepare'] = 'husky';
+        } else {
+            $packageJson['scripts']['prepare'] .= ' && husky';
+        }
+
         $packageJsonClean = json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('package.json'), $packageJsonClean);
+
+        if (! is_dir(base_path('.husky'))) {
+            mkdir(base_path('.husky'));
+        }
+        file_put_contents(base_path('.husky/pre-commit'), 'npm test');
 
         $passThru = [];
 
@@ -187,7 +198,6 @@ class InitCommand extends Command
         $passThru[] = 'npm uninstall '.implode(' ', $allNpmUninstalls);
         $passThru[] = 'npm install --save-dev '.implode(' ', $allNpmDevInstalls);
         $passThru[] = 'echo "export default { extends: [\'@commitlint/config-conventional\'] };" > commitlint.config.js';
-        $passThru[] = 'npx husky install';
         $passThru[] = 'echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg';
         passthru(implode(' && ', $passThru));
 
