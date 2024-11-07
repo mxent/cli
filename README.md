@@ -1,6 +1,7 @@
 # Mxent CLI
 
 There's so much more we can do with Laravel!
+
 Our CLI provides additional artisan commands that might be useful for your Laravel development.
 
 ## Installation
