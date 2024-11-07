@@ -150,15 +150,6 @@ class InitCommand extends Command
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
 
-        if (! isset($composerJson['scripts']['post-install-cmd'])) {
-            $composerJson['scripts']['post-install-cmd'] = [];
-        }
-        $composerJson['scripts']['post-install-cmd'][] = 'npm update';
-        if (! isset($composerJson['scripts']['post-update-cmd'])) {
-            $composerJson['scripts']['post-update-cmd'] = [];
-        }
-        $composerJson['scripts']['post-update-cmd'][] = 'npm update';
-
         $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composerJsonClean);
 
@@ -176,27 +167,29 @@ class InitCommand extends Command
         $packageJsonClean = json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('package.json'), $packageJsonClean);
 
+        $passThru = [];
+
         $allComposerRequires = [];
         foreach ($composerRequires as $packageName => $version) {
             $allComposerRequires[] = $packageName.($version ? ':'.$version : '');
         }
-        passthru('composer require '.implode(' ', $allComposerRequires));
 
         $allNpmUninstalls = [];
         foreach ($npmUninstalls as $packageName) {
             $allNpmUninstalls[] = $packageName;
         }
-        passthru('npm uninstall '.implode(' ', $allNpmUninstalls));
-
         $allNpmDevInstalls = [];
         foreach ($npmDevInstalls as $packageName => $version) {
             $allNpmDevInstalls[] = $packageName.($version ? '@'.$version : '');
         }
-        passthru('npm install --save-dev '.implode(' ', $allNpmDevInstalls));
 
-        passthru('echo "export default { extends: [\'@commitlint/config-conventional\'] };" > commitlint.config.js');
-        passthru('npx husky install');
-        passthru('echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg');
+        $passThru[] = 'composer require '.implode(' ', $allComposerRequires);
+        $passThru[] = 'npm uninstall '.implode(' ', $allNpmUninstalls);
+        $passThru[] = 'npm install --save-dev '.implode(' ', $allNpmDevInstalls);
+        $passThru[] = 'echo "export default { extends: [\'@commitlint/config-conventional\'] };" > commitlint.config.js';
+        $passThru[] = 'npx husky install';
+        $passThru[] = 'echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg';
+        passthru(implode(' && ', $passThru));
 
         $this->components->info('Module '.$package.' created');
     }
