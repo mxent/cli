@@ -98,6 +98,9 @@ class InitCommand extends Command
             '@inertiajs/vue3' => null,
             '@vitejs/plugin-vue' => null,
             'path' => null,
+            '@commitlint/cli' => null,
+            '@commitlint/config-conventional' => null,
+            'husky' => null,
         ];
 
         $npmUninstalls = [
@@ -166,6 +169,10 @@ class InitCommand extends Command
             $packageJson['workspaces'][] = 'vendor/'.$vendorSnake.'/*';
         }
 
+        if (! isset($packageJson['scripts']['test'])) {
+            $packageJson['scripts']['test'] = '';
+        }
+
         $packageJsonClean = json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('package.json'), $packageJsonClean);
 
@@ -186,6 +193,10 @@ class InitCommand extends Command
             $allNpmDevInstalls[] = $packageName.($version ? '@'.$version : '');
         }
         passthru('npm install --save-dev '.implode(' ', $allNpmDevInstalls));
+
+        passthru('echo "export default { extends: [\'@commitlint/config-conventional\'] };" > commitlint.config.js');
+        passthru('npx husky install');
+        passthru('echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg');
 
         $this->components->info('Module '.$package.' created');
     }
