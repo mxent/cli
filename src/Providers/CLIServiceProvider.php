@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class CLIServiceProvider extends ServiceProvider
 {
-
     /**
      * Register
      */

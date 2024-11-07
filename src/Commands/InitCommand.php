@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class InitCommand extends Command
 {
     protected $signature = 'mxent:init {--force}';
+
     protected $description = 'Convert this project to a module';
 
     public function handle()
@@ -15,33 +16,37 @@ class InitCommand extends Command
         $force = $this->option('force');
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         $packageJson = json_decode(file_get_contents(base_path('package.json')), true);
-        if(
-            !$force &&
+        if (
+            ! $force &&
             (
                 $composerJson['name'] != 'laravel/laravel' ||
                 $composerJson['type'] != 'project'
             )
         ) {
             $this->error('Please use this command in a fresh Laravel project');
+
             return;
         }
 
         $this->components->info('This will convert this project to a module. Make sure you do this in a fresh project.');
         $proceed = $this->confirm('Do you want to proceed?');
-        if(! $proceed) {
+        if (! $proceed) {
             $this->components->info('Aborted');
+
             return;
         }
 
         $package = $this->ask('What is the name of the package?');
-        if(! $package) {
+        if (! $package) {
             $this->error('Package name is required');
+
             return;
         }
 
         $packageBits = explode('/', $package);
-        if(count($packageBits) != 2) {
+        if (count($packageBits) != 2) {
             $this->error('Invalid package name. Please use the format vendor/package-name');
+
             return;
         }
 
@@ -65,7 +70,7 @@ class InitCommand extends Command
         ];
 
         $renames = [
-            // 
+            //
         ];
 
         $empty = [
@@ -99,31 +104,31 @@ class InitCommand extends Command
             'axios',
         ];
 
-        foreach($renames as $from => $to) {
+        foreach ($renames as $from => $to) {
             rename(base_path($from), base_path($to));
         }
 
-        foreach($empty as $path) {
-            if(! is_dir(base_path($path))) {
+        foreach ($empty as $path) {
+            if (! is_dir(base_path($path))) {
                 continue;
             }
 
             $files = scandir(base_path($path));
-            foreach($files as $file) {
-                if($file == '.' || $file == '..') {
+            foreach ($files as $file) {
+                if ($file == '.' || $file == '..') {
                     continue;
                 }
 
                 $fullPath = $path.'/'.$file;
 
-                if(is_file(base_path($fullPath))) {
+                if (is_file(base_path($fullPath))) {
                     unlink(base_path($fullPath));
                 }
             }
         }
 
-        foreach($deletes as $path) {
-            if(file_exists(base_path($path))) {
+        foreach ($deletes as $path) {
+            if (file_exists(base_path($path))) {
                 unlink(base_path($path));
             }
         }
@@ -131,7 +136,7 @@ class InitCommand extends Command
         $this->recursiveStubs(__DIR__.'/../../stubs', base_path(), $replaces);
         $this->recursiveReplace(base_path(), $replaces);
 
-        if(! isset($composerJson['extra']['laravel']['providers'])) {
+        if (! isset($composerJson['extra']['laravel']['providers'])) {
             $composerJson['extra']['laravel']['providers'] = [];
         }
         $composerJson['name'] = $package;
@@ -141,12 +146,12 @@ class InitCommand extends Command
         $composerJson['extra']['laravel']['providers'][] = $vendor.'\\'.$name.'\\Providers\\'.$name.'ServiceProvider';
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
-        
-        if(! isset($composerJson['scripts']['post-install-cmd'])) {
+
+        if (! isset($composerJson['scripts']['post-install-cmd'])) {
             $composerJson['scripts']['post-install-cmd'] = [];
         }
         $composerJson['scripts']['post-install-cmd'][] = 'npm update';
-        if(! isset($composerJson['scripts']['post-update-cmd'])) {
+        if (! isset($composerJson['scripts']['post-update-cmd'])) {
             $composerJson['scripts']['post-update-cmd'] = [];
         }
         $composerJson['scripts']['post-update-cmd'][] = 'npm update';
@@ -154,10 +159,10 @@ class InitCommand extends Command
         $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composerJsonClean);
 
-        if(! isset($packageJson['workspaces'])) {
+        if (! isset($packageJson['workspaces'])) {
             $packageJson['workspaces'] = [];
         }
-        if(! in_array('vendor/'.$vendorSnake.'/*', $packageJson['workspaces'])) {
+        if (! in_array('vendor/'.$vendorSnake.'/*', $packageJson['workspaces'])) {
             $packageJson['workspaces'][] = 'vendor/'.$vendorSnake.'/*';
         }
 
@@ -165,19 +170,19 @@ class InitCommand extends Command
         file_put_contents(base_path('package.json'), $packageJsonClean);
 
         $allComposerRequires = [];
-        foreach($composerRequires as $packageName => $version) {
+        foreach ($composerRequires as $packageName => $version) {
             $allComposerRequires[] = $packageName.($version ? ':'.$version : '');
         }
         passthru('composer require '.implode(' ', $allComposerRequires));
 
         $allNpmUninstalls = [];
-        foreach($npmUninstalls as $packageName) {
+        foreach ($npmUninstalls as $packageName) {
             $allNpmUninstalls[] = $packageName;
         }
         passthru('npm uninstall '.implode(' ', $allNpmUninstalls));
 
         $allNpmDevInstalls = [];
-        foreach($npmDevInstalls as $packageName => $version) {
+        foreach ($npmDevInstalls as $packageName => $version) {
             $allNpmDevInstalls[] = $packageName.($version ? '@'.$version : '');
         }
         passthru('npm install --save-dev '.implode(' ', $allNpmDevInstalls));
@@ -189,8 +194,8 @@ class InitCommand extends Command
     {
         $files = scandir($path);
 
-        foreach($files as $file) {
-            if(
+        foreach ($files as $file) {
+            if (
                 $file == '.' ||
                 $file == '..'
             ) {
@@ -200,9 +205,9 @@ class InitCommand extends Command
             $fullPath = $path.'/'.$file;
             $fullDestination = $destination.'/'.str_replace('.stub', '', $file);
             $fullDestination = str_replace(array_keys($replaces), array_values($replaces), $fullDestination);
-            
-            if(is_dir($fullPath)) {
-                if(! is_dir($fullDestination)) {
+
+            if (is_dir($fullPath)) {
+                if (! is_dir($fullDestination)) {
                     mkdir($fullDestination);
                 }
 
@@ -210,10 +215,10 @@ class InitCommand extends Command
             } else {
                 $contents = file_get_contents($fullPath);
 
-                foreach($replaces as $search => $replace) {
+                foreach ($replaces as $search => $replace) {
                     $contents = str_replace($search, $replace, $contents);
                 }
-                
+
                 file_put_contents($fullDestination, $contents);
             }
         }
@@ -225,14 +230,14 @@ class InitCommand extends Command
             'vendor',
             'node_modules',
         ];
-        
+
         $gitignores = base_path('.gitignore');
         $gitignores = file_exists($gitignores) ? file($gitignores) : [];
 
         $files = scandir($path);
 
-        foreach($files as $file) {
-            if(
+        foreach ($files as $file) {
+            if (
                 $file == '.' ||
                 $file == '..' ||
                 in_array($file, $excludes) ||
@@ -244,15 +249,15 @@ class InitCommand extends Command
 
             $fullPath = $path.'/'.$file;
 
-            if(is_dir($fullPath)) {
+            if (is_dir($fullPath)) {
                 $this->recursiveReplace($fullPath, $replaces);
             } else {
 
                 $contents = file_get_contents($fullPath);
                 $isJson = in_array(pathinfo($fullPath, PATHINFO_EXTENSION), ['json', 'lock']);
 
-                foreach($replaces as $search => $replace) {
-                    if($isJson) {
+                foreach ($replaces as $search => $replace) {
+                    if ($isJson) {
                         $search = str_replace('\\', '\\\\', $search);
                         $replace = str_replace('\\', '\\\\', $replace);
                     }
@@ -264,5 +269,4 @@ class InitCommand extends Command
             }
         }
     }
-
 }

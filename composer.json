@@ -14,12 +14,14 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
     "extra": {
         "laravel": {
             "providers": [
                 "Mxent\\CLI\\Providers\\CLIServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18"
     }
 }

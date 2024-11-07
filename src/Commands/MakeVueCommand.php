@@ -7,19 +7,20 @@ use Illuminate\Support\Str;
 
 class MakeVueCommand extends Command
 {
-
     protected $signature = 'make:vue {name=ComponentName}';
+
     protected $description = 'Create a new Vue component';
 
     public function handle()
     {
 
         $name = $this->argument('name');
-        if($name == 'ComponentName') {
+        if ($name == 'ComponentName') {
             $name = $this->ask('What is the name of the component?');
         }
-        if(! $name) {
+        if (! $name) {
             $this->error('Component name is required');
+
             return;
         }
 
@@ -31,14 +32,24 @@ class MakeVueCommand extends Command
         ];
         $vueStub = str_replace(array_keys($replaces), array_values($replaces), $vueStub);
         $path = base_path('resources/js');
-        if(count($nameBits) > 1) {
-            $path .= '/'.implode('/', array_slice($nameBits, 0, count($nameBits) - 1));
+        $pathDestination = array_slice($nameBits, 0, count($nameBits) - 1);
+        foreach ($pathDestination as $pathBit) {
+            $path .= '/'.$pathBit;
+            if (! is_dir($path)) {
+                mkdir($path);
+            }
         }
         $path .= '/'.$originalName.'.vue';
+
+        if (file_exists($path)) {
+            $this->error('Vue component already exists');
+
+            return;
+        }
+
         file_put_contents($path, $vueStub);
 
         $this->components->info('Vue component created successfully');
 
     }
-
 }
