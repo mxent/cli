@@ -14,6 +14,7 @@ class StartCommand extends Command
     {
         $force = $this->option('force');
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
+        $packageJson = json_decode(file_get_contents(base_path('package.json')), true);
         if(
             !$force &&
             (
@@ -138,17 +139,17 @@ class StartCommand extends Command
         $composerJson['extra']['laravel']['providers'][] = $vendor.'\\'.$name.'\\Providers\\'.$name.'ServiceProvider';
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
-        if(! isset($composerJson['scripts']['post-install-cmd'])) {
-            $composerJson['scripts']['post-install-cmd'] = [];
-        }
-        $composerJson['scripts']['post-install-cmd'][] = '@php artisan mxent:npm-diff';
-        if(! isset($composerJson['scripts']['post-update-cmd'])) {
-            $composerJson['scripts']['post-update-cmd'] = [];
-        }
-        $composerJson['scripts']['post-update-cmd'][] = '@php artisan mxent:npm-diff';
 
         $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composerJsonClean);
+        
+        if(! isset($packageJson['workspaces'])) {
+            $packageJson['workspaces'] = [];
+        }
+        $packageJson['workspaces'][] = 'vendor/vendor-name/*';
+
+        $packageJsonClean = json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents(base_path('package.json'), $packageJsonClean);
 
         $allComposerRequires = [];
         foreach($composerRequires as $packageName => $version) {
