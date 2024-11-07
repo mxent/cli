@@ -18,8 +18,8 @@ class StartCommand extends Command
         if(
             !$force &&
             (
-                ! $composerJson['name'] != 'laravel/laravel' ||
-                ! $composerJson['type'] != 'project'
+                $composerJson['name'] != 'laravel/laravel' ||
+                $composerJson['type'] != 'project'
             )
         ) {
             $this->error('Please use this command in a fresh Laravel project');
