@@ -24,6 +24,7 @@ class CLIServiceProvider extends ServiceProvider
             \Mxent\CLI\Commands\InitCommand::class,
             \Mxent\CLI\Commands\NpmDiffCommand::class,
             \Mxent\CLI\Commands\NpmInstallCommand::class,
+            \Mxent\CLI\Commands\MakeVueCommand::class,
         ]);
     }
 
