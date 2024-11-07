@@ -3,6 +3,10 @@
 There's so much more we can do with Laravel!
 Our CLI provides additional artisan commands that might be useful for your Laravel development.
 
+## Installation
+
+    composer require mxent/cli
+
 ## Modular
 
 Our opinionated modular setup for Laravel.
