@@ -136,6 +136,8 @@ class InitCommand extends Command
         }
         $composerJson['name'] = $package;
         $composerJson['type'] = 'library';
+        $composerJson['description'] = 'The skeleton module created using mxent/cli.';
+        $composerJson['keywords'] = [$vendorSnake, $nameSnake];
         $composerJson['extra']['laravel']['providers'][] = $vendor.'\\'.$name.'\\Providers\\'.$name.'ServiceProvider';
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
