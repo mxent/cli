@@ -20,4 +20,4 @@ In our case, we are maintaining multiple laravel projects with the same login an
 
     php artisan mxent:init
 
-One your laravel project has been converted to a package, you may now publish it to your preferred repo and require it to each project that needs it.
+Once done, you may now publish it to your preferred repo and require it to each project that needs it.
