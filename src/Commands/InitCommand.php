@@ -205,7 +205,7 @@ class InitCommand extends Command
         passthru(implode(' && ', $passThru));
 
         $huskyPreCommit = file_get_contents(base_path('.husky/pre-commit'));
-        $huskyPreCommit = 'npx lint-staged'.PHP_EOL.$huskyPreCommit;
+        $huskyPreCommit = 'vendor/bin/pint'.PHP_EOL.'npx lint-staged'.PHP_EOL.$huskyPreCommit;
         file_put_contents(base_path('.husky/pre-commit'), $huskyPreCommit);
 
         passthru('git add .');
