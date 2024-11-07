@@ -139,10 +139,19 @@ class StartCommand extends Command
         $composerJson['extra']['laravel']['providers'][] = $vendor.'\\'.$name.'\\Providers\\'.$name.'ServiceProvider';
         $composerJson['autoload']['psr-4'][$vendor.'\\'.$name.'\\'] = 'app/';
         unset($composerJson['autoload']['psr-4']['App\\']);
+        
+        if(! isset($composerJson['scripts']['post-install-cmd'])) {
+            $composerJson['scripts']['post-install-cmd'] = [];
+        }
+        $composerJson['scripts']['post-install-cmd'][] = 'npm update';
+        if(! isset($composerJson['scripts']['post-update-cmd'])) {
+            $composerJson['scripts']['post-update-cmd'] = [];
+        }
+        $composerJson['scripts']['post-update-cmd'][] = 'npm update';
 
         $composerJsonClean = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(base_path('composer.json'), $composerJsonClean);
-        
+
         if(! isset($packageJson['workspaces'])) {
             $packageJson['workspaces'] = [];
         }
