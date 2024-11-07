@@ -1,6 +1,7 @@
 <?php
 namespace VendorName\ModuleName\Providers;
 
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use VendorName\ModuleName\Providers\RouteServiceProvider;
 
@@ -29,6 +30,8 @@ class ModuleNameServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../resources/css' => resource_path('css/vendor/module-name'),
         ], 'module-name-css');
+
+        Vite::prefetch(concurrency: 3);
     }
 
     public function register()

@@ -23,7 +23,7 @@ export default defineConfig({
             {
                 find: '@',
                 replacement: 'resources/js',
-                customResolver: function (a, b) {
+                customResolver: (a, b) => {
                     let basePath = a;
                     const pathBits = b.split('/');
                     if(pathBits.includes('vendor')) {
@@ -38,7 +38,7 @@ export default defineConfig({
             {
                 find: '@vendor-name',
                 replacement: 'vendor/vendor-name',
-                customResolver: function (a, b) {
+                customResolver: (a) => {
                     const vendorBits = a.split('/');
                     vendorBits.splice(3, 0, 'resources');
                     vendorBits.splice(4, 0, 'js');
@@ -52,5 +52,18 @@ export default defineConfig({
                 replacement: path.resolve(__dirname, 'vendor'),
             },
         ],
+    },
+    build: {
+        minify: true,
+        sourcemap: false,
+        rollupOptions: {
+            output: {
+                manualChunks: (path) => {
+                    if (path.includes('node_modules')) {
+                        return 'vendor';
+                    }
+                },
+            },
+        },
     },
 });
