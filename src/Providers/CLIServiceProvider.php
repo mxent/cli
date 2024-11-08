@@ -20,7 +20,8 @@ class CLIServiceProvider extends ServiceProvider
     protected function registerCommands()
     {
         $this->commands([
-            \Mxent\CLI\Commands\InitCommand::class,
+            \Mxent\CLI\Commands\InitVueCommand::class,
+            \Mxent\CLI\Commands\InitReactCommand::class,
             \Mxent\CLI\Commands\NpmDiffCommand::class,
             \Mxent\CLI\Commands\NpmInstallCommand::class,
             \Mxent\CLI\Commands\MakeVueCommand::class,

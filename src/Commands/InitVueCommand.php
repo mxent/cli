@@ -5,11 +5,11 @@ namespace Mxent\CLI\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class InitCommand extends Command
+class InitVueCommand extends Command
 {
-    protected $signature = 'mxent:init {--force}';
+    protected $signature = 'mxent:init-vue {--force}';
 
-    protected $description = 'Convert this project to a module';
+    protected $description = 'Convert this project into a vue module';
 
     public function handle()
     {
@@ -143,7 +143,7 @@ class InitCommand extends Command
             }
         }
 
-        $this->recursiveStubs(__DIR__.'/../../stubs', base_path(), $replaces);
+        $this->recursiveStubs(__DIR__.'/../../stubs/vue', base_path(), $replaces);
         $this->recursiveReplace(base_path(), $replaces);
 
         if (! isset($composerJson['extra']['laravel']['providers'])) {

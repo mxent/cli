@@ -26,7 +26,7 @@ class MakeVueCommand extends Command
 
         $nameBits = explode('/', $name);
         $originalName = Str::studly($nameBits[count($nameBits) - 1]);
-        $vueStub = file_get_contents(__DIR__.'/../../stubs/resources/js/Pages/ModuleName/IndexPage.vue.stub');
+        $vueStub = file_get_contents(__DIR__.'/../../stubs/vue/resources/js/Pages/ModuleName/IndexPage.vue.stub');
         $replaces = [
             'ModuleName' => $originalName,
         ];

@@ -1,0 +1,10 @@
+export default function Home() {
+  return (
+    <>
+      <div className="p-3">
+        <div className="font-bold mb-3">ModuleName</div>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas distinctio dicta enim sapiente dignissimos eos ea veritatis et impedit assumenda. Incidunt earum laborum amet ab reprehenderit impedit, possimus voluptate quasi!</p>
+      </div>
+    </>
+  )
+}
