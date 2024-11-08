@@ -19,7 +19,7 @@
         "resources/js/**/*.ts",
         "resources/js/**/*.js",
         "resources/js/**/*.tsx",
-        resources/js/**/*.jsx",
+        "resources/js/**/*.jsx",
         "resources/js/**/*.d.ts",
         "vendor/vendor-name/*/resources/js/**/*.ts",
         "vendor/vendor-name/*/resources/js/**/*.js",

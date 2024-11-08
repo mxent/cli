@@ -218,6 +218,7 @@ class InitReactCommand extends Command
         $passThru[] = 'composer require '.implode(' ', $allComposerRequires);
         $passThru[] = 'npm uninstall '.implode(' ', $allNpmUninstalls);
         $passThru[] = 'npm install --save-dev '.implode(' ', $allNpmDevInstalls);
+        $passThru[] = 'npm install '.implode(' ', $allNpmInstalls);
         $passThru[] = 'echo "export default { extends: [\'@commitlint/config-conventional\'] };" > commitlint.config.js';
         $passThru[] = 'git init';
         $passThru[] = 'npx husky init';
