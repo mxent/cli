@@ -1,27 +1,27 @@
 {
-    "name": "mxent/cli",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Mxent\\CLI\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "mikkiesco",
-            "email": "mikkiescorido@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Mxent\\CLI\\Providers\\CLIServiceProvider"
-            ]
-        }
-    },
-    "require-dev": {
-        "laravel/pint": "^1.18"
+  "name": "mxent/cli",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Mxent\\CLI\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "mikkiesco",
+      "email": "mikkiescorido@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Mxent\\CLI\\Providers\\CLIServiceProvider"
+      ]
+    }
+  },
+  "require-dev": {
+    "laravel/pint": "^1.18"
+  }
 }

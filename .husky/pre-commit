@@ -1,2 +1,4 @@
-vendor/bin/pint
 npm test
+vendor/bin/pint
+npm run format
+git add .
