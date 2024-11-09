@@ -6,12 +6,5 @@
     "printWidth": 100,
     "semi": true,
     "arrowParens": "avoid",
-    "endOfLine": "auto",
-    "overrides": [
-        {
-            "files": [
-                "resources/**/*.{js,mjs,cjs,ts,jsx,tsx}"
-            ]
-        }
-    ]
+    "endOfLine": "auto"
 }
